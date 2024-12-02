@@ -1,0 +1,11 @@
+* Advent of Code 2024
+This time in rust. Let the unwrapping begin.
+
+** Running
+Install nix and direnv, add ~experimental-features = nix-command flakes~ into ~/etc/nix/nix.conf~.
+~direnv allow~.
+Put inputs into ~data/01_input~, ~data/02_input~, ...
+
+#+BEGIN_SRC sh
+cargo run --bin day02
+#+END_SRC
