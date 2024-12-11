@@ -5,14 +5,12 @@ fn main() {
     let contents = std::fs::read_to_string("data/06_input").expect("Failed to read file");
 
     let lines: Vec<Vec<char>> = contents.lines().map(|line| line.chars().collect()).collect();
-    let mut sum = 0;
-    let mut sum_2 = 0;
 
     let h = lines.len();
     let w = lines[0].len();
 
     let mut cur_pos: (i32, i32) = (0, 0);
-    let mut cur_dir: (i32, i32) = (-1, 0);
+    let cur_dir: (i32, i32) = (-1, 0);
 
     let mut map: HashMap<(i32, i32), bool> = HashMap::new();
 
@@ -31,27 +29,31 @@ fn main() {
 
     let (visited, _) = simulate(init_pos, init_dir, h, w, &map); 
 
-    sum = visited.iter().map(|(pos, dir)| pos).collect::<HashSet<_>>().len();
+    let sum = visited.iter().map(|(pos, _)| pos).collect::<HashSet<_>>().len();
 
     let mut possible_obstacles: HashSet<(i32, i32)> = HashSet::new();
 
-    for (i, (pos, dir)) in visited.iter().enumerate() {
-	if i % 10 == 0 {
-	    println!("{}/{}", i, visited.len());
-	}
+    for (_i, (pos, dir)) in visited.iter().enumerate() {
+	// if i % 10 == 0 {
+	//     println!("{}/{}", i, visited.len());
+	// }
 	let new_obstacle_pos = step(*pos, *dir);
 	if new_obstacle_pos == init_pos {
 	    continue;
 	}
 	let mut new_map = map.clone();
 	new_map.insert(new_obstacle_pos, true);
+	// let already_occupied = map.insert(new_obstacle_pos, true);
 	let (_, cycles) = simulate(init_pos, init_dir, h, w, &new_map);
 	if cycles {
 	    possible_obstacles.insert(new_obstacle_pos);
 	}
+	// if already_occupied.is_none() {
+	//     map.remove(&new_obstacle_pos);
+	// }
     }
 
-    sum_2 = possible_obstacles.len();
+    let sum_2 = possible_obstacles.len();
 
     println!("Part 1: {}", sum);
     println!("Part 2: {}", sum_2);
